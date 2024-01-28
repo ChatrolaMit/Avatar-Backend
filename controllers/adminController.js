@@ -5,7 +5,7 @@ const catchAsyncError = require('../middleware/CatchAsyncErrors');
 const { sendToken } = require('../utils/jwt');
 
 exports.registerAdmin = catchAsyncError(async (req, res, next) => {
-  const { name, email, password, privilege } = req.body;
+  const { name, email, password, privilege } = req.body.user;
   if (!name || !email || !password) {
     return next(new ErrorHandler('Missing fields', 400));
   }
@@ -35,7 +35,7 @@ exports.loginAdmin = catchAsyncError(async (req, res, next) => {
   if (!admin) {
     return next(new ErrorHandler('Invalid email or password', 401));
   }
-  const isPasswordMatched = await admin.comparePassword(password);
+  const isPasswordMatched = await admin.comparePassword(password);  
   if (!isPasswordMatched) {
     return next(new ErrorHandler('Invalid email or password', 401));
   }
@@ -118,14 +118,17 @@ exports.updateAdminPrivilege = catchAsyncError(async (req, res, next) => {
   if (!admin) {
     return next(new ErrorHandler('User not found', 200));
   }
-  if (admin.email === req.user.email) {
+  // console.log("admin email :: ",req.)
+  if (admin.email === req.body.user.email) {
     return next(new ErrorHandler('Cannot change privilege for self', 400));
   }
+  console.log("admin email :: ",admin.email)
+  console.log(privilege)
   admin.privilege = privilege;
   await admin.save();
   res.status(200).json({
     success: true,
-    data: admin,
+    data: admin, 
   });
 });
 
@@ -137,7 +140,7 @@ exports.deleteAdmin = catchAsyncError(async (req, res, next) => {
   if (!admin) {
     return next(new ErrorHandler('User not found', 200));
   }
-  if (admin.email === req.user.email) {
+  if (admin.email === req.body.user.email) {
     return next(new ErrorHandler('Cannot delete self', 400));
   }
   await admin.remove();

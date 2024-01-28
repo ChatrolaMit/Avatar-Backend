@@ -12,7 +12,7 @@ router.route('/auth').post(adminController.sendCurrentUser);
 router
   .route('/register')
   .post(
-    auth.checkUserAuthentication,
+    // auth.checkUserAuthentication,
     auth.checkAdminPrivileges('super'),
     adminController.registerAdmin
   );
@@ -60,9 +60,19 @@ router
     productController.createProduct
   );
 
-// send, update, delete a single product
+//get all the products
+
+router
+  .route('/products')
+  .get(productController.getAllProducts)
+
 router
   .route('/product/:id')
+  .get(
+    auth.checkUserAuthentication,
+    auth.checkAdminPrivileges('moderate', 'super'),
+    productController.getSingleProduct
+  )
   .put(
     auth.checkUserAuthentication,
     auth.checkAdminPrivileges('moderate', 'super'),

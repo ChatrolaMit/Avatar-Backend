@@ -64,7 +64,7 @@ app.use('/api/upload', uploadRouter);
 app.use(errorMiddleware);
 
 // starting server
-const server = app.listen(process.env.PORT || 6000, () => {
+const server = app.listen(process.env.PORT || 8000, () => {
   console.log('Server running  on ');
 });
 console.log("We are up")

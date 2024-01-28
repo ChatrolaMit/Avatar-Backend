@@ -11,6 +11,7 @@ exports.sendToken = (admin, statusCode, res) => {
     sameSite: 'none',
     secure: true,
   };
+  console.log(token)
   res
     .status(statusCode)
     .cookie('token', token, options)
