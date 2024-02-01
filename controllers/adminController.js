@@ -118,12 +118,9 @@ exports.updateAdminPrivilege = catchAsyncError(async (req, res, next) => {
   if (!admin) {
     return next(new ErrorHandler('User not found', 200));
   }
-  // console.log("admin email :: ",req.)
   if (admin.email === req.body.user.email) {
     return next(new ErrorHandler('Cannot change privilege for self', 400));
   }
-  console.log("admin email :: ",admin.email)
-  console.log(privilege)
   admin.privilege = privilege;
   await admin.save();
   res.status(200).json({

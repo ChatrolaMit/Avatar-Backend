@@ -5,7 +5,6 @@ const cloudinary = require('../config/cloudinary');
 
 // create a new product
 exports.createProduct = catchAsyncError(async (req, res, next) => {
-  console.log("Hello")
   req.body.admin = req.body.user.id;
   let images = req.body.images;
   let newImages = [];
@@ -78,7 +77,6 @@ exports.deleteProduct = catchAsyncError(async (req, res, next) => {
 // send all product details
 exports.getAllProducts = catchAsyncError(async (req, res) => {
   const products = await Product.find();
-  console.log("All the products")
   const data = products.map((item, index) => {
     const {
       _id: id,
@@ -108,7 +106,6 @@ exports.getAllProducts = catchAsyncError(async (req, res) => {
       featured,
     };
     
-    console.log("All product", products)
     return newItem;
   });
   res.status(200).json({
